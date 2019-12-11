@@ -10,6 +10,6 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
   test 'root_path returns a response with an expected body' do
     get root_path
 
-    assert_includes response.body, 'Hello World!'
+    assert_includes response.body, 'Image Sharing'
   end
 end
