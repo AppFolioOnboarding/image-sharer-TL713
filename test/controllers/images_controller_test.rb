@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
   test 'new_image_path returns a 200 response' do
     get new_image_path
     assert_response :ok
