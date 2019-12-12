@@ -19,6 +19,8 @@ gem 'jquery-rails'
 
 gem 'simple_form'
 
+gem 'rails-controller-testing'
+
 gem 'validate_url'
 
 gem 'webpacker', '~> 4'

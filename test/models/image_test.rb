@@ -16,8 +16,8 @@ class ImageTest < ActiveSupport::TestCase
     assert_not image.valid?
   end
 
-  test 'valid url' do
-    image = Image.new(link: '123456', title: 'false url')
+  test 'url need to be valid' do
+    image = Image.new(link: '123456', title: 'false url ')
     assert_not image.valid?
   end
 end

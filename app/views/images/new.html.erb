@@ -1,28 +1,24 @@
 <h1>test</h1>
-<p>
+
 <%= simple_form_for @image do |f| %>
-    <%= f.input :title %>
-    <%= f.input :link %>
-    <%= f.button :submit %>
+  <%= f.input :title %>
+  <%= f.input :link %>
+  <%= f.button :submit %>
 <% end %>
 
-  <%= form_with scope: :image, url: images_path, local: true do |form| %>
-
-      <% if @image.errors.any? %>
-        <div id="error_explanation">
-          <h2>
-            <%= pluralize(@image.errors.count, "error") %> prohibited
-            this image from being saved:
-          </h2>
-          <ul>
-            <% @image.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
-
+<%= form_with scope: :image, url: images_path, local: true do |form| %>
+  <% if @image.errors.any? %>
+    <div id="error_explanation" class="js-error-block">
+      <h2>
+        <%= pluralize(@image.errors.count, "error") %> prohibited
+        this image from being saved:
+      </h2>
+      <ul>
+        <% @image.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 <% end %>
-
 <%= link_to 'Back', new_image_path %>
-</p>
