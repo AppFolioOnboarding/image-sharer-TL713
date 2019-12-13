@@ -25,6 +25,8 @@ gem 'validate_url'
 
 gem 'webpacker', '~> 4'
 
+gem 'poltergeist'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

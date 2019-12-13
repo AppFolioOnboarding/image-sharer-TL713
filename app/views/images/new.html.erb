@@ -1,4 +1,4 @@
-<h1>test</h1>
+<h1>Upload</h1>
 
 <%= simple_form_for @image do |f| %>
   <%= f.input :title %>
@@ -21,4 +21,6 @@
     </div>
   <% end %>
 <% end %>
-<%= link_to 'Back', new_image_path %>
+<%= link_to 'Image Index Page', root_path, { class: 'js-index-page-link' } %>
+<%= link_to 'Back to Upload', new_image_path %>
+
