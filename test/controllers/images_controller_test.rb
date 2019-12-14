@@ -51,4 +51,24 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  test 'upload page redirect to home page' do
+    get new_image_path
+    assert_select '.js-index-page-link' do |element|
+      assert_equal 1, element.length
+      assert_equal '/', element[0].attr('href')
+      assert_equal 'Image Index Page', element[0].text
+    end
+  end
+
+  test 'show page redirect to home page' do
+    post images_path, params: { image: { title: 'image', link: 'http://www.example.com' } }
+    image_test = Image.last
+    get image_path(image_test)
+    assert_select '.js-index-page-link' do |element|
+      assert_equal 1, element.length
+      assert_equal '/', element[0].attr('href')
+      assert_equal 'Image Index Page', element[0].text
+    end
+  end
 end
