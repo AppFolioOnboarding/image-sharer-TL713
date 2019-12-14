@@ -71,4 +71,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'Image Index Page', element[0].text
     end
   end
+
+  test 'default 20 images after set up' do
+    Image.destroy_all
+
+    Rails.application.load_seed
+    assert_equal 20, Image.count
+  end
 end
