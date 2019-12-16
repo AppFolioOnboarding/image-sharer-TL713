@@ -5,6 +5,6 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :ok
-    assert_includes response.body, 'Image Sharing'
+    assert_includes response.body, 'Image Index'
   end
 end
