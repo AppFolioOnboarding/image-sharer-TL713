@@ -6,6 +6,9 @@ AllCops:
     - 'vendor/**/*'
     - 'node_modules/**/*'
     - 'bin/*'
+    - 'config/initializers/simple_form.rb'
+    - 'db/seeds.rb'
+    - 'db/migrate/*acts_as_taggable_on_engine.rb'
   TargetRubyVersion: 2.5
 
 Layout/IndentFirstArrayElement:
@@ -18,7 +21,7 @@ Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
 Metrics/LineLength:
-  Max: 112  # Maximum line length from `rails new`
+  Max: 200  # Maximum line length from `rails new`
 
 Rails:
   Enabled: true

@@ -7,6 +7,12 @@
   <strong>Link:</strong>
   <%= @image.link %>
 </p>
+
+<p>
+  <strong>Tags:</strong>
+  <span class="js-tag-list"><%= @image.tag_list %></span>
+</p>
+
 <p>
   <%= image_tag(@image.link) %>
 </p>

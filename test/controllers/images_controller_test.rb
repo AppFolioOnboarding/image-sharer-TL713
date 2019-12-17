@@ -7,15 +7,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'save image and valid image' do
-    post images_path, params: { image: { title: 'image', link: 'http://www.example.com' } }
+    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: '' } }
     image_test = Image.last
     assert_equal 'image', image_test.title
     assert_equal 'http://www.example.com', image_test.link
+    assert_equal [], image_test.tag_list
     assert_redirected_to image_path(image_test)
   end
 
   test 'image upload page shows error message ' do
-    post images_path, params: { image: { title: nil, link: nil } }
+    post images_path, params: { image: { title: nil, link: nil, tag_list: '' } }
     assert_response :ok
     assert_select '.js-error-block ul li' do |elements|
       assert_equal 3, elements.length
@@ -62,7 +63,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'show page redirect to home page' do
-    post images_path, params: { image: { title: 'image', link: 'http://www.example.com' } }
+    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: '' } }
     image_test = Image.last
     get image_path(image_test)
     assert_select '.js-index-page-link' do |element|
@@ -70,6 +71,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal '/', element[0].attr('href')
       assert_equal 'Image Index Page', element[0].text
     end
+    assert_select '.js-tag-list', text: ''
   end
 
   test 'default 20 images after set up' do
@@ -77,5 +79,32 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     Rails.application.load_seed
     assert_equal 20, Image.count
+  end
+
+  test 'save tags' do
+    assert_difference %w[ActsAsTaggableOn::Tag.count ActsAsTaggableOn::Tagging.count], 2 do
+      assert_difference 'Image.count', 1 do
+        post images_path, params: { image: {
+          title: 'image',
+          link: 'http://www.example.com',
+          tag_list: 'example, test'
+        } }
+      end
+    end
+    image_test = Image.last
+    assert_equal 'image', image_test.title
+    assert_equal 'http://www.example.com', image_test.link
+    assert_equal %w[example test], image_test.tag_list
+    assert_redirected_to image_path(image_test)
+  end
+
+  test 'show tags' do
+    image = Image.create(
+      title: 'image',
+      link: 'http://www.example.com',
+      tag_list: 'example, test'
+    )
+    get image_path(image)
+    assert_select '.js-tag-list', text: 'example, test'
   end
 end
