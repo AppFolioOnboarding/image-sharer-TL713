@@ -107,4 +107,23 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_path(image)
     assert_select '.js-tag-list', text: 'example, test'
   end
+
+  test 'index has title tags redirects to show page' do
+    image = {title: 'bridge', link: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
+      '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg', tag_list: 'example, test' }
+    Image.create!(image)
+
+    # test image index page response ok
+    get images_path
+    assert_response :ok
+
+    # test image display & order
+    assert_select '.js-image-title', text: 'bridge'
+    assert_select '.js-image-tags', text: 'example, test'
+    assert_select '.js-show-page-link' do |ele|
+      assert_equal "/images/#{Image.last[:id]}", ele[0].attr('href')
+    end
+    #text: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
+    #  '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg'
+  end
 end

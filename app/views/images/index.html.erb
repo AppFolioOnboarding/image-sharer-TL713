@@ -5,7 +5,13 @@
   <div>
     <% @images.each do |f| %>
       <p>
-        <%= image_tag(f.link, width: '400', title: f.title)%>
+        <%= link_to(image_tag(f.link, width: '400', title: f.title), image_path(f), { class: 'js-show-page-link' })%>
+        <div>
+          <strong class= 'js-image-title' ><%= f.title%></strong>
+        </div>
+        <div class = 'js-image-tags'>
+          <%= f.tag_list%>
+        </div>
       </p>
     <% end %>
   </div>
