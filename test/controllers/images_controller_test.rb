@@ -37,11 +37,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       'auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' }
     ]
     Image.create(image_test_list)
-
     # test image index page response ok
     get images_path
     assert_response :ok
-
     # test image display & order
     assert_select 'img', image_test_list.length do |images|
       image_test_reversed = image_test_list.reverse
@@ -76,7 +74,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
   test 'default 20 images after set up' do
     Image.destroy_all
-
     Rails.application.load_seed
     assert_equal 20, Image.count
   end
@@ -108,22 +105,103 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.js-tag-list', text: 'example, test'
   end
 
-  test 'index has title tags redirects to show page' do
-    image = {title: 'bridge', link: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
+  test 'index has title tags and links to show' do
+    image = { title: 'bridge', link: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
       '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg', tag_list: 'example, test' }
+    tags_list = %w[example test]
     Image.create!(image)
-
-    # test image index page response ok
     get images_path
     assert_response :ok
-
     # test image display & order
     assert_select '.js-image-title', text: 'bridge'
-    assert_select '.js-image-tags', text: 'example, test'
+    assert_select '.js-image-tags' do |element|
+      element.each_with_index do |ele, index|
+        assert_equal tags_list[index], ele.text.strip
+      end
+    end
     assert_select '.js-show-page-link' do |ele|
       assert_equal "/images/#{Image.last[:id]}", ele[0].attr('href')
     end
-    #text: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
-    #  '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg'
+  end
+
+  test 'index page should display images with a tag on it' do
+    Image.destroy_all
+
+    image_list = [
+      { title: 'Santa Barbara',
+        link: 'https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_spotlight_santabarbara_hero_st_rm_529573764_1280x640_0.jpg',
+        tag_list: %w[view SantaBarbara] },
+      { title: 'SB',
+        link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+        tag_list: 'SantaBarbara' },
+      { title: 'LA',
+        link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+        tag_list: 'LosAngeles' }
+    ]
+    sb_list = []
+    image_list.each do |image|
+      sb_list.append(image[:link]) if image[:tag_list].include?('SantaBarbara')
+    end
+    Image.create!(image_list)
+
+    get images_path(tag: 'SantaBarbara')
+    assert_response :ok
+
+    assert_select('img') do |elements|
+      assert_equal 2, elements.count
+      elements.each_with_index do |ele, index|
+        assert_equal sb_list.reverse[index], ele.attr('src')
+      end
+    end
+  end
+
+  test 'index displays all images when no tag selected' do
+    Image.destroy_all
+    image_list = [
+      { title: 'Santa Barbara',
+        link: 'https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_spotlight_santabarbara_hero_st_rm_529573764_1280x640_0.jpg',
+        tag_list: %w[view SantaBarbara] },
+      { title: 'SB',
+        link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+        tag_list: 'SantaBarbara' },
+      { title: 'LA',
+        link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+        tag_list: 'LosAngeles' }
+    ]
+    Image.create!(image_list)
+    get images_path
+    assert_response :ok
+    assert_select('img') do |elements|
+      assert_equal image_list.length, elements.count
+      elements.each_with_index do |ele, index|
+        assert_equal image_list.reverse[index][:link], ele.attr('src')
+      end
+    end
+  end
+
+  test 'No image shows for index show nonexistent tag' do
+    Image.destroy_all
+    image_list = [{ title: 'Santa Barbara',
+                    link: 'https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/vc_spotlight_santabarbara_hero_st_rm_529573764_1280x640_0.jpg',
+                    tag_list: %w[view SantaBarbara] },
+                  { title: 'SB',
+                    link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+                    tag_list: 'Santa Barbara' }]
+    Image.create!(image_list)
+    get images_path(tag: 'Los Angeles')
+    assert_response :ok
+    assert_select 'img', count: 0
+  end
+
+  test 'tags redirect to show all' do
+    Image.destroy_all
+    Image.create!(title: 'SB',
+                  link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+                  tag_list: 'Santa Barbara')
+    get images_path(tag: 'Santa Barbara')
+    assert_select '.js-index-page-link' do |element|
+      assert_equal '/', element[0].attr('href')
+      assert_equal 'Back to All', element[0].text
+    end
   end
 end

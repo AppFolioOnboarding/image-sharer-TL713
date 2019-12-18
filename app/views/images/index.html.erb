@@ -2,17 +2,20 @@
   <h1>Image Index</h1>
   <h3> <%= link_to 'Upload image using url', new_image_path %> </h3>
   <h2>List of images</h2>
+  <% if @tag %>
+    <span> Images for <%= content_tag(:strong, @tag) %> </span>
+    <div> <%= link_to 'Back to All', root_path, { class: "js-index-page-link" } %> </div>
+  <% end %>
   <div>
+    <% if @images.count == 0%>
+      <h4> No image for this tag. </h4>
+    <% end %>
     <% @images.each do |f| %>
-      <p>
         <%= link_to(image_tag(f.link, width: '400', title: f.title), image_path(f), { class: 'js-show-page-link' })%>
         <div>
-          <strong class= 'js-image-title' ><%= f.title%></strong>
+          <strong class="js-image-title" ><%= f.title%></strong>
         </div>
-        <div class = 'js-image-tags'>
-          <%= f.tag_list%>
-        </div>
-      </p>
+        <%= render 'tags', image: f %>
     <% end %>
   </div>
 </div>

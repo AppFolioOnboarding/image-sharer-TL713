@@ -1,0 +1,7 @@
+<div class="tags" align = "center">
+  <span>Tags: </span>
+  <% image.tag_list.each do |tag| %>
+    <span class = 'js-image-tags'> <%= link_to content_tag(:strong, "#{tag}"), images_path(tag: tag) %></span>
+  <% end %>
+</div>
+
