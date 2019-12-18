@@ -1,6 +1,11 @@
 <div align = "center">
   <h1>Image Index</h1>
   <h3> <%= link_to 'Upload image using url', new_image_path %> </h3>
+
+  <% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+  <% end %>
+
   <h2>List of images</h2>
   <% if @tag %>
     <span> Images for <%= content_tag(:strong, @tag) %> </span>
