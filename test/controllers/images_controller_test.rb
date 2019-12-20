@@ -249,7 +249,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_difference 'Image.count', -1 do
-
       delete image_path(img)
 
       get root_path

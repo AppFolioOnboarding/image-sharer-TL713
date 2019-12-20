@@ -12,7 +12,6 @@ end
 require 'page_objects/document.rb'
 Dir[File.dirname(__FILE__) + '/page_objects/**/*.rb'].each { |file| require file }
 
-
 class FlowTestCase < ActiveSupport::TestCase
   include Capybara::DSL
   include Rails.application.routes.url_helpers
@@ -37,3 +36,5 @@ end
 ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 
 Capybara.default_driver = Capybara.javascript_driver
+
+AePageObjects::Element.include(PageObjects::Extensions::ElementInlineErrorMessage)

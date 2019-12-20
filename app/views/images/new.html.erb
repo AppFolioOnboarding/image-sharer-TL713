@@ -1,9 +1,9 @@
 <h1>Upload</h1>
 
 <%= simple_form_for @image do |f| %>
-  <%= f.input :title %>
-  <%= f.input :link %>
-  <%= f.input :tag_list %>
+  <%= f.input :title, input_html: {class: 'js-title'} %>
+  <%= f.input :link, input_html: {class: 'js-link'} %>
+  <%= f.input :tag_list, input_html: {class: 'js-tag-list'} %>
   <%= f.button :submit %>
 <% end %>
 

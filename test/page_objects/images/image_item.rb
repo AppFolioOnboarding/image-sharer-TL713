@@ -1,6 +1,6 @@
 module PageObjects
   module Images
-    class ImageInfo < AePageObjects::Element
+    class ImageItem < AePageObjects::Element
       def url
         node.find('img')[:src]
       end
@@ -13,13 +13,10 @@ module PageObjects
         node.all('.js-image-tags').map(&:text)
       end
 
-      def click_tag!(tag_name)
-        node.all('.js-tag-class').map do |link|
-          link.click if link.text == tag_name
-        end
-        window.change_to(IndexPage)
+      def click_image!
+        node.find('.js-show-page-link', &:click)
+        window.change_to(ShowPage)
       end
     end
   end
 end
-
