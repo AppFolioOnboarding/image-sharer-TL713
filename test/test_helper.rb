@@ -1,6 +1,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
+require 'ae_page_objects'
+require 'ae_page_objects/rails'
 
 module ActiveSupport
   class TestCase

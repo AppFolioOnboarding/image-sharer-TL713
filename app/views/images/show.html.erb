@@ -1,19 +1,21 @@
-<p>
+<div>
   <strong>Title:</strong>
-  <%= @image.title %>
-</p>
+  <p class="js-image-title"><%= @image.title %></p>
+</div>
 
-<p>
+<div>
   <strong>Link:</strong>
   <%= @image.link %>
-</p>
+</div>
 
-<p>
+<div>
   <strong>Tags:</strong>
   <span class="js-tag-list"><%= @image.tag_list %></span>
-</p>
+</div>
 
-<p>
+<div>
   <%= image_tag(@image.link) %>
-</p>
-<%= link_to 'Image Index Page', root_path, { class: 'js-index-page-link' }%>
+</div>
+  <%= link_to 'Delete', image_path(@image), method: :delete, data: {confirm: 'Do you want to delete this image?'}, class: 'js-delete-link' %>
+</div>
+<%= link_to 'Image Index Page', root_path, class: 'js-index-page-link'%>

@@ -25,8 +25,6 @@ gem 'validate_url'
 
 gem 'webpacker', '~> 4'
 
-gem 'poltergeist'
-
 gem 'acts-as-taggable-on', '~> 6.0'
 
 group :development, :test do
@@ -51,6 +49,7 @@ group :production do
 end
 
 group :test do
+  gem 'ae_page_objects'
   gem 'capybara'
   gem 'selenium-webdriver'
 end

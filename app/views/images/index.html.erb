@@ -1,21 +1,29 @@
 <div align = "center">
   <h1>Image Index</h1>
   <h3> <%= link_to 'Upload image using url', new_image_path %> </h3>
+
+  <% if flash[:notice] %>
+    <div class="js-notice"><%= flash[:notice] %></div>
+  <% end %>
+
   <h2>List of images</h2>
   <% if @tag %>
     <span> Images for <%= content_tag(:strong, @tag) %> </span>
     <div> <%= link_to 'Back to All', root_path, { class: "js-index-page-link" } %> </div>
   <% end %>
-  <div>
-    <% if @images.count == 0%>
-      <h4> No image for this tag. </h4>
-    <% end %>
-    <% @images.each do |f| %>
-        <%= link_to(image_tag(f.link, width: '400', title: f.title), image_path(f), { class: 'js-show-page-link' })%>
+  <% if @images.count == 0%>
+    <h4> No image for this tag. </h4>
+  <% end %>
+
+  <div class="js-image-list">
+    <% @images.each do |image| %>
+      <div class="js-single-image">
+        <%= link_to(image_tag(image.link, width: '400', title: image.title), image_path(image), { class: 'js-show-page-link' })%>
         <div>
-          <strong class="js-image-title" ><%= f.title%></strong>
+          <strong class="js-image-title" ><%= image.title%></strong>
         </div>
-        <%= render 'tags', image: f %>
+        <%= render 'tags', image: image %>
+      </div>
     <% end %>
   </div>
 </div>

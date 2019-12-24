@@ -46,6 +46,8 @@ GEM
       activerecord (~> 5.0)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
+    ae_page_objects (4.2.0)
+      capybara (~> 3.0)
     arel (9.0.0)
     ast (2.4.0)
     bindex (0.7.0)
@@ -61,7 +63,6 @@ GEM
       xpath (~> 3.2)
     childprocess (1.0.1)
       rake (< 13.0)
-    cliver (0.3.2)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
     erubi (1.8.0)
@@ -113,10 +114,6 @@ GEM
     parser (2.6.3.0)
       ast (~> 2.4.0)
     pg (1.1.4)
-    poltergeist (1.18.1)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     pronto (0.10.0)
       gitlab (~> 4.0, >= 4.0.0)
       httparty (>= 0.13.7)
@@ -243,12 +240,12 @@ PLATFORMS
 
 DEPENDENCIES
   acts-as-taggable-on (~> 6.0)
+  ae_page_objects
   byebug
   capybara
   jquery-rails
   listen (~> 3.0.5)
   pg
-  poltergeist
   pronto-rubocop
   puma (~> 3.0)
   rails (~> 5.2.0)

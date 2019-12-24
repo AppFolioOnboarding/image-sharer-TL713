@@ -18,12 +18,23 @@ class ImagesController < ApplicationController
   end
 
   def show
-    @image = Image.find(params[:id])
+    @image = Image.find_by_id(params[:id])
+  end
+
+  def destroy
+    id = params[:id]
+    if Image.exists?(id)
+      Image.find(id).destroy
+      flash[:notice] = 'Image deleted successfully!'
+    else
+      flash[:notice] = "Image id #{id} does not exist!"
+    end
+    redirect_to root_path
   end
 
   private
 
   def image_params
-    params.require(:image).permit(:title, :link, :tag_list)
+    params.require(:image).permit(:id, :title, :link, :tag_list)
   end
 end
