@@ -7,16 +7,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'save image and valid image' do
-    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: '' } }
+    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: 'test' } }
     image_test = Image.last
     assert_equal 'image', image_test.title
     assert_equal 'http://www.example.com', image_test.link
-    assert_equal [], image_test.tag_list
+    assert_equal ['test'], image_test.tag_list
     assert_redirected_to image_path(image_test)
   end
 
   test 'image upload page shows error message ' do
-    post images_path, params: { image: { title: nil, link: nil, tag_list: '' } }
+    post images_path, params: { image: { title: nil, link: nil, tag_list: 'test' } }
     assert_response :ok
     assert_select '.js-error-block ul li' do |elements|
       assert_equal 3, elements.length
@@ -30,11 +30,11 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     Image.destroy_all
     image_test_list = [
       { title: 'bridge', link: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg/' \
-      '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg' },
+      '?cs=srgb&dl=beautiful-beauty-blue-bright-414612.jpg&fm=jpg', tag_list: 'test' },
       { title: 'road', link: 'https://images.pexels.com/photos/237018/pexels-photo-237018.jpeg?' \
-      'auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' },
+      'auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag_list: 'test' },
       { title: 'coast', link: 'https://images.pexels.com/photos/1076429/pexels-photo-1076429.jpeg?' \
-      'auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' }
+      'auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag_list: 'test' }
     ]
     Image.create(image_test_list)
     # test image index page response ok
@@ -61,7 +61,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'show page redirect to home page' do
-    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: '' } }
+    post images_path, params: { image: { title: 'image', link: 'http://www.example.com', tag_list: 'test' } }
     image_test = Image.last
     get image_path(image_test)
     assert_select '.js-index-page-link' do |element|
@@ -69,7 +69,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal '/', element[0].attr('href')
       assert_equal 'Image Index Page', element[0].text
     end
-    assert_select '.js-tag-list', text: ''
+    assert_select '.js-tag-list', text: 'test'
   end
 
   test 'default 20 images after set up' do
@@ -254,6 +254,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       get root_path
       assert_response :ok
       assert_select 'img', false
+    end
+  end
+
+  test 'tag is mandatory' do
+    post images_path, params: { image: { title: 'test',
+                                         link: 'https://embedwistia-a.akamaihd.net/deliveries/14c7c6bd712d4d744121933e032bbaf6.webp?image_crop_resized=1280x750',
+                                         tag_list: nil } }
+    assert_response :ok
+    assert_select '.js-error-block ul li' do |elements|
+      assert_equal 1, elements.length
+      assert_equal "Tag list can't be blank", elements[0].text
     end
   end
 end

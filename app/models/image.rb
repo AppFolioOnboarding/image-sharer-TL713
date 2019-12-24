@@ -4,4 +4,5 @@ class Image < ApplicationRecord
             presence: true,
             url: true
   validates :title, presence: true
+  validates :tag_list, presence: true
 end
