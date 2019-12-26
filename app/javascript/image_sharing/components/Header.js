@@ -13,13 +13,13 @@ class Header extends Component {
       <div>
         <Row>
           <Col lg={{ size: 4, offset: 4 }}>
-            <h3 className='text-center'>
+            <h3 className='js-title text-center'>
               {title}
             </h3>
           </Col>
         </Row>
       </div>
-    )
+    );
   }
 }
 
